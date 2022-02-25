@@ -27,7 +27,7 @@
       </a>
       <hr class="sidebar-divider my-0">
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="dashboard">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
@@ -44,7 +44,7 @@
         <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Paramétrage</h6>
-            <a class="collapse-item" href="{{ URL::to('/classe') }}">Classe</a>
+            <a class="collapse-item" href="{{ url('/voirclasse') }}">Classe</a>
             <a class="collapse-item" href="#">Livre</a>
             <a class="collapse-item" href="#">Importation</a>
           </div>

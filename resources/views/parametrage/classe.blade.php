@@ -31,7 +31,7 @@
       </a>
       <hr class="sidebar-divider my-0">
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="dashboard">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
@@ -255,7 +255,7 @@
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <img class="img-profile rounded-circle" src="{{ asset('backend/img/boy.png')}}" style="max-width: 60px">
-                <span class="ml-2 d-none d-lg-inline text-white small">{{$data->name}}</span>
+                <span class="ml-2 d-none d-lg-inline text-white small">{{Auth::user()}}</span>
               </a>
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#">
@@ -302,25 +302,18 @@
               </tr>
             </thead>
             <tbody>
-{{--                 @php($i = 1)
-                @foreach ($categories as $category)
-                <tr>
-                    <th scope="row">{{ $i++ }}</th>
-                    <td> {{ $category->code }} </td>
-                    <td> {{ $category->libelle }} </td>
-                    <td> </td>
-                  </tr>
-                @endforeach --}}
                 @php($i=1)
+                @foreach($categories as $categorie)
                 <tr>
                     <th scope="row">{{$i++}}</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
+                    <td>{{$categorie->code}}</td>
+                    <td>{{$categorie->libelle}}</td>
                     <td>
-                        <a href="#" class="btn btn-primary">Modifier</a>
-                        <a href="#" class="btn btn-danger">Supprimer</a>
+                        <a href="{{ url('classe/modifier/'.$categorie->id) }}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifier">Modifier</a>
+                        <a href="{{ url('classe/supprimer/'.$categorie->id) }}" class="btn btn-danger">Supprimer</a>
                     </td>
                   </tr>
+                @endforeach
             </tbody>
     </table>
 
@@ -355,6 +348,42 @@
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                 <button type="submit" class="btn btn-success">Enregistrer</button>
+                </div>
+            </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit -->
+  <div class="modal fade" id="modifier" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modification de l'enregistrement</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{{ url ('editClasse') }}" method="GET">
+                @csrf
+                    <div class="form-group">
+                        <label for="validationServer01">Code classe</label>
+                        <input type="text" name="code" class="form-control" id="validationServer01"
+                        value="{{old('code')}}">
+                        @error('code')
+                            <span class="text-danger"> {{$message}} </span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="validationServer02">Libellé de la classe</label>
+                        <input type="text" name="libelle" value="{{old('libelle')}}" class="form-control" id="validationServer02">
+                        @error('libelle')
+                            <span class="text-danger"> {{$message}} </span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="submit" class="btn btn-success">Modifier</button>
                 </div>
             </form>
       </div>
@@ -403,6 +432,17 @@
           button: "OK",
       });
   </script>
+@endif
+
+@if(Session::has('vrai'))
+<script>
+    swal({
+        title: "Super !",
+        text: "Suppression effectuée avec succès.",
+        icon: "success",
+        button: "OK",
+    });
+</script>
 @endif
 </body>
 

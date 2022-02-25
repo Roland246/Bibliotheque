@@ -31,5 +31,7 @@ Route::get('/dashboard',[AuthentificationController::class,'dashboard'])->middle
 Route::get('/logout',[AuthentificationController::class,'logout']);
 
 //Classe
-Route::get('/VoirClasse',[ClasseController::class,'TouteClasse'])->name("VoirClasse");
+Route::get('/voirclasse',[ClasseController::class,'touteClasse']);
 Route::post('/ajoutClasse',[ClasseController::class,'AjouterClasse'])->name("ajoutClasse");
+Route::get('/classe/modifier/{id}',[ClasseController::class,'Edit']);
+Route::get('/classe/supprimer/{id}',[ClasseController::class,'Delete']);

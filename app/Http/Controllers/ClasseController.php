@@ -6,9 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Classe;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
 class ClasseController extends Controller
 {
 
@@ -18,6 +19,7 @@ class ClasseController extends Controller
             $data = User::where('id', '=' , Session::get('loginId'))->first();
         }
         return view('parametrage.classe', compact('data'));
+
     }
 
     public function AjouterClasse(Request $request){
@@ -34,16 +36,31 @@ class ClasseController extends Controller
         $data = array();
         $data['code'] = $request->code;
         $data['libelle'] = $request->libelle;
+        $data['created_at'] = Carbon::now();
         DB::table('classes')->insert($data);
 
         return back()->with('success','OK');
 
     }
 
-    public function TouteClasse(Request $request){
+    public function touteClasse(){
         $categories = DB::table('classes')->latest()->get();
-        return dd($categories);
-        return view('parametrage.classe', compact('categories'));
+        return view('parametrage.classe',compact('categories'));
+    }
+
+    public function Find($id){
+        $categories = DB::table('classes')->where('id',$id)->first();
+        return view('parametrage.classe',compact('categories'));
+    }
+
+    public function Edit($id){
+        $categories = Classe::find($id);
+        return view('parametrage.classe',compact('categories'));
+    }
+
+    public function Delete($id){
+        $delete = Classe::where('id',$id)->delete();
+        return redirect()->back()->with('vrai','supression ok!');
     }
 
 }
