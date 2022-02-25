@@ -255,7 +255,7 @@
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <img class="img-profile rounded-circle" src="{{ asset('backend/img/boy.png')}}" style="max-width: 60px">
-                <span class="ml-2 d-none d-lg-inline text-white small">{{Auth::user()}}</span>
+                <span class="ml-2 d-none d-lg-inline text-white small">{{$data->name}}</span>
               </a>
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#">
@@ -303,17 +303,21 @@
             </thead>
             <tbody>
                 @php($i=1)
-                @foreach($categories as $categorie)
+                @foreach ($class as $item)
                 <tr>
                     <th scope="row">{{$i++}}</th>
-                    <td>{{$categorie->code}}</td>
-                    <td>{{$categorie->libelle}}</td>
+                    <td>{{$item->code}}</td>
+                    <td>{{$item->libelle}}</td>
                     <td>
-                        <a href="{{ url('classe/modifier/'.$categorie->id) }}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifier">Modifier</a>
-                        <a href="{{ url('classe/supprimer/'.$categorie->id) }}" class="btn btn-danger">Supprimer</a>
+                        <a href="{{ url('classes/'.$item->id.'/edit') }}" class="d-inline p-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifier">Modifier</a>
+                        <form action="{{ url('classes/'.$item->id) }}" method="POST" class="d-inline-block">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger">Supprimer</button>
+                        </form>
                     </td>
                   </tr>
-                @endforeach
+                  @endforeach
             </tbody>
     </table>
 
@@ -326,11 +330,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form action="{{ route ('ajoutClasse') }}" method="POST">
+            <form method="post" action="{{ route('classes.store') }}">
                 @csrf
                     <div class="form-group">
                         <label for="validationServer01">Code classe</label>
-                        <input type="text" name="code" class="form-control" id="validationServer01"
+                        <input type="text" name="code" value="{{old('code')}}" class="form-control" id="validationServer01"
                         placeholder="Code classe">
                         @error('code')
                             <span class="text-danger"> {{$message}} </span>
@@ -338,7 +342,7 @@
                     </div>
                     <div class="form-group">
                         <label for="validationServer02">Libellé de la classe</label>
-                        <input type="text" name="libelle" class="form-control" id="validationServer02"
+                        <input type="text" name="libelle" value="{{old('libelle')}}" class="form-control" id="validationServer02"
                         placeholder="Libellé de la classe">
                         @error('libelle')
                             <span class="text-danger"> {{$message}} </span>
@@ -363,19 +367,20 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form action="{{ url ('editClasse') }}" method="GET">
+            <form method="post" action="{{ url('classes/'.$item->id) }}">
                 @csrf
+                @method('PUT')
                     <div class="form-group">
                         <label for="validationServer01">Code classe</label>
-                        <input type="text" name="code" class="form-control" id="validationServer01"
-                        value="{{old('code')}}">
+                        <input type="text" name="code" value="{{$item->code}}" class="form-control" id="validationServer01"
+                        >
                         @error('code')
                             <span class="text-danger"> {{$message}} </span>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="validationServer02">Libellé de la classe</label>
-                        <input type="text" name="libelle" value="{{old('libelle')}}" class="form-control" id="validationServer02">
+                        <input type="text" name="libelle" value="{{$item->libelle}}" class="form-control" id="validationServer02">
                         @error('libelle')
                             <span class="text-danger"> {{$message}} </span>
                         @enderror
@@ -438,12 +443,24 @@
 <script>
     swal({
         title: "Super !",
-        text: "Suppression effectuée avec succès.",
+        text: "Modification effectué avec succès.",
         icon: "success",
         button: "OK",
     });
 </script>
 @endif
+
+@if(Session::has('supprime'))
+<script>
+    swal({
+        title: "Super !",
+        text: "Suppression effectué avec succès.",
+        icon: "success",
+        button: "OK",
+    });
+</script>
+@endif
+
 </body>
 
 </html>

@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthentificationController;
-use App\Http\Controllers\ClasseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +20,6 @@ Route::get('/', function () {
 
 
 // Afficher la vue classe
-Route::get('/classe', [ClasseController::class, 'getClasse']);
 
 Route::get('/login',[AuthentificationController::class,'login'])->middleware('alreadyLoggedIn');
 Route::get('/registration',[AuthentificationController::class,'registration'])->middleware('alreadyLoggedIn');
@@ -31,7 +29,4 @@ Route::get('/dashboard',[AuthentificationController::class,'dashboard'])->middle
 Route::get('/logout',[AuthentificationController::class,'logout']);
 
 //Classe
-Route::get('/voirclasse',[ClasseController::class,'touteClasse']);
-Route::post('/ajoutClasse',[ClasseController::class,'AjouterClasse'])->name("ajoutClasse");
-Route::get('/classe/modifier/{id}',[ClasseController::class,'Edit']);
-Route::get('/classe/supprimer/{id}',[ClasseController::class,'Delete']);
+Route::resource('classes', 'ClasseController');
