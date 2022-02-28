@@ -94,14 +94,15 @@ class ClasseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'code' => 'required|max:12',
-            'libelle' => 'required',
-        ],
-        [
-            'code.required' => 'Ce champ est requis',
-            'libelle.required' => 'Ce champ est requis',
-        ]);
+        // $validatedData = $request->validate([
+        //     'code' => 'required|max:12',
+        //     'libelle' => 'required',
+        // ],
+        
+        // [
+        //     'code.required' => 'Ce champ est requis',
+        //     'libelle.required' => 'Ce champ est requis',
+        // ]);
 
         $item = Classe::find($id);
         $item->code = $request->input('code');
