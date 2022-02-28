@@ -17,6 +17,9 @@
   <link href="{{ asset('backend/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
   <link href="{{ asset('backend/css/ruang-admin.min.css')}}" rel="stylesheet">
 
+  <script src="{{ asset('backend/jquery-3.6.0.min.js')}}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 </head>
 
 <body id="page-top">
@@ -180,7 +183,7 @@
                 </h6>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="img/man.png" style="max-width: 60px" alt="">
+                    
                     <div class="status-indicator bg-success"></div>
                   </div>
                   <div class="font-weight-bold">
@@ -191,7 +194,7 @@
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="img/girl.png" style="max-width: 60px" alt="">
+                  
                     <div class="status-indicator bg-default"></div>
                   </div>
                   <div>
@@ -309,7 +312,8 @@
                     <td>{{$item->code}}</td>
                     <td>{{$item->libelle}}</td>
                     <td>
-                        <a href="{{ url('classes/'.$item->id.'/edit') }}" class="d-inline p-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifier">Modifier</a>
+                        <a href="javascript:void(0)" id="modifier_class" data-id="{{$item->id}}" data-libelle="{{$item->libelle}}" data-code="{{$item->code}}" class=""> <i class="fas fa-fw fa-edit" style="font-size:15px"></i></a>
+                       
                         <form action="{{ url('classes/'.$item->id) }}" method="POST" class="d-inline-block">
                             @csrf
                             @method('DELETE')
@@ -370,9 +374,13 @@
             <form method="post" action="{{ url('classes/'.$item->id) }}">
                 @csrf
                 @method('PUT')
+                <input type="text" name="id" id="id"
+                         class="form-control"
+                        >
                     <div class="form-group">
                         <label for="validationServer01">Code classe</label>
-                        <input type="text" name="code" value="{{$item->code}}" class="form-control" id="validationServer01"
+                        <input type="text" name="code" id="code"
+                         class="form-control" id="validationServer01"
                         >
                         @error('code')
                             <span class="text-danger"> {{$message}} </span>
@@ -380,7 +388,7 @@
                     </div>
                     <div class="form-group">
                         <label for="validationServer02">Libellé de la classe</label>
-                        <input type="text" name="libelle" value="{{$item->libelle}}" class="form-control" id="validationServer02">
+                        <input type="text" name="libelle" id="libelle" class="form-control" id="validationServer02">
                         @error('libelle')
                             <span class="text-danger"> {{$message}} </span>
                         @enderror
@@ -423,44 +431,73 @@
   <script src="{{ asset('backend/vendor/jquery/jquery.min.js')}}"></script>
   <script src="{{ asset('backend/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
   <script src="{{ asset('backend/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
-  <script src="{{ asset('backend/js/ruang-admin.min.js')}}"></script>
-  <script src="{{ asset('backend/vendor/chart.js/Chart.min.js')}}"></script>
-  <script src="{{ asset('backend/js/demo/chart-area-demo.js')}}"></script>
+  {{-- <script src="{{ asset('backend/js/ruang-admin.min.js')}}"></script> --}}
+  {{-- <script src="{{ asset('backend/vendor/chart.js/Chart.min.js')}}"></script> --}}
+  {{-- <script src="{{ asset('backend/js/demo/chart-area-demo.js')}}"></script> --}}
+ 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  @if(Session::has('success'))
-  <script>
-      swal({
-          title: "Super !",
-          text: "Classe ajoutée avec succès.",
-          icon: "success",
-          button: "OK",
-      });
-  </script>
-@endif
 
-@if(Session::has('vrai'))
-<script>
-    swal({
-        title: "Super !",
-        text: "Modification effectué avec succès.",
-        icon: "success",
-        button: "OK",
-    });
-</script>
-@endif
 
-@if(Session::has('supprime'))
-<script>
-    swal({
-        title: "Super !",
-        text: "Suppression effectué avec succès.",
-        icon: "success",
-        button: "OK",
-    });
-</script>
-@endif
+
 
 </body>
 
 </html>
+
+
+<script type="text/javascript">
+
+
+  $(document).ready(function(){
+  
+      $('#creer_banque').click(function() {
+          // alert('ok')
+         // $('#mandat_id').val('');
+          $('#form_banque').trigger("reset");
+          $('#titrebanque').html('Ajouter nouvelle banque ')
+          $('#modal_banque').modal('show');
+      });
+      //  appel du modal de mode de paiement
+  
+      $('#creer_mode').click(function() {
+          // alert('ok')
+         // $('#mandat_id').val('');
+          $('#form_mode').trigger("reset");
+          $('#titremode').html('Ajouter nouveau mode ')
+          $('#modal_mode').modal('show');
+      });
+  
+  
+  
+     
+        $('body').on('click','#modifier_class', function(){
+  
+          var id = $(this).data('id');
+          var libelle = $(this).data('libelle');
+          var code = $(this).data('code');
+  
+         // $('#titrebanque').html('Modification')
+         console.log(id);
+          $('#modifier').modal('show');
+  
+          $('#id').val(id);
+          $('#libelle').val(libelle);
+          $('#code').val(code);
+      });
+  
+      //*************** modification de mode*********** */
+  
+      $('body').on('click','#modif_mode', function(){
+  
+          var mode_id = $(this).data('id');
+          var libelle = $(this).data('libelle');
+  
+          $('#titremode').html('Modification')
+          $('#modal_mode').modal('show')
+  
+          $('#mode_id').val(mode_id);
+          $('#libelle_mode').val(libelle);
+          });
+  });
+  </script>
