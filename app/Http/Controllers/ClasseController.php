@@ -98,7 +98,7 @@ class ClasseController extends Controller
         //     'code' => 'required|max:12',
         //     'libelle' => 'required',
         // ],
-        
+
         // [
         //     'code.required' => 'Ce champ est requis',
         //     'libelle.required' => 'Ce champ est requis',

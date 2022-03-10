@@ -30,3 +30,5 @@ Route::get('/logout',[AuthentificationController::class,'logout']);
 
 //Classe
 Route::resource('classes', 'ClasseController');
+//Etudiant
+Route::resource('etudiants', 'EtudiantController');

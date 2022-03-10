@@ -18,6 +18,8 @@
   <link href="{{ asset('backend/css/ruang-admin.min.css')}}" rel="stylesheet">
 
   <script src="{{ asset('backend/jquery-3.6.0.min.js')}}"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 </head>
@@ -67,7 +69,7 @@
         <div id="collapseBootstrap2" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Saisie</h6>
-            <a class="collapse-item" href="#">Inscirption</a>
+            <a class="collapse-item" href="{{ URL::to('etudiants/create') }}">Inscirption</a>
             <a class="collapse-item" href="#">Emprunt de livre</a>
             <a class="collapse-item" href="#">Dépot de livre</a>
           </div>
@@ -183,7 +185,7 @@
                 </h6>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="dropdown-list-image mr-3">
-                    
+
                     <div class="status-indicator bg-success"></div>
                   </div>
                   <div class="font-weight-bold">
@@ -194,7 +196,7 @@
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="dropdown-list-image mr-3">
-                  
+
                     <div class="status-indicator bg-default"></div>
                   </div>
                   <div>
@@ -258,7 +260,7 @@
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <img class="img-profile rounded-circle" src="{{ asset('backend/img/boy.png')}}" style="max-width: 60px">
-                <span class="ml-2 d-none d-lg-inline text-white small">{{$data->name}}</span>
+                <span class="ml-2 d-none d-lg-inline text-white small">{{Auth::user()}}</span>
               </a>
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#">
@@ -288,6 +290,10 @@
         <div class="container-fluid" id="container-wrapper">
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">CLASSE</h1>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="./">Accueil</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">CLASSE</li>
+                  </ol>
             </div>
 
             <!-- Button trigger modal -->
@@ -312,8 +318,8 @@
                     <td>{{$item->code}}</td>
                     <td>{{$item->libelle}}</td>
                     <td>
-                        <a href="javascript:void(0)" id="modifier_class" data-id="{{$item->id}}" data-libelle="{{$item->libelle}}" data-code="{{$item->code}}" class=""> <i class="fas fa-fw fa-edit" style="font-size:15px"></i></a>
-                       
+                        <a href="javascript:void(0)" id="modifier_class" data-id="{{$item->id}}" data-libelle="{{$item->libelle}}" data-code="{{$item->code}}" class="btn btn-primary">Modifier</a>
+
                         <form action="{{ url('classes/'.$item->id) }}" method="POST" class="d-inline-block">
                             @csrf
                             @method('DELETE')
@@ -374,9 +380,10 @@
             <form method="post" action="{{ url('classes/'.$item->id) }}">
                 @csrf
                 @method('PUT')
+                <label for="validationServer01">Identifiant</label>
                 <input type="text" name="id" id="id"
                          class="form-control"
-                        >
+                         readonly>
                     <div class="form-group">
                         <label for="validationServer01">Code classe</label>
                         <input type="text" name="code" id="code"
@@ -431,73 +438,69 @@
   <script src="{{ asset('backend/vendor/jquery/jquery.min.js')}}"></script>
   <script src="{{ asset('backend/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
   <script src="{{ asset('backend/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
-  {{-- <script src="{{ asset('backend/js/ruang-admin.min.js')}}"></script> --}}
-  {{-- <script src="{{ asset('backend/vendor/chart.js/Chart.min.js')}}"></script> --}}
-  {{-- <script src="{{ asset('backend/js/demo/chart-area-demo.js')}}"></script> --}}
- 
+    <script src="{{ asset('backend/js/ruang-admin.min.js')}}"></script>
+    <link href="{{ asset('backend/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('backend/css/ruang-admin.min.css')}}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="text/javascript">
+
+
+    $(document).ready(function(){
+
+        $('#creer_banque').click(function() {
+            // alert('ok')
+           // $('#mandat_id').val('');
+            $('#form_banque').trigger("reset");
+            $('#titrebanque').html('Ajouter nouvelle banque ')
+            $('#modal_banque').modal('show');
+        });
+        //  appel du modal de mode de paiement
+
+        $('#creer_mode').click(function() {
+            // alert('ok')
+           // $('#mandat_id').val('');
+            $('#form_mode').trigger("reset");
+            $('#titremode').html('Ajouter nouveau mode ')
+            $('#modal_mode').modal('show');
+        });
 
 
 
 
+          $('body').on('click','#modifier_class', function(){
+
+            var id = $(this).data('id');
+            var libelle = $(this).data('libelle');
+            var code = $(this).data('code');
+
+           // $('#titrebanque').html('Modification')
+           console.log(id);
+            $('#modifier').modal('show');
+
+            $('#id').val(id);
+            $('#libelle').val(libelle);
+            $('#code').val(code);
+        });
+
+        //*************** modification de mode*********** */
+
+        $('body').on('click','#modif_mode', function(){
+
+            var mode_id = $(this).data('id');
+            var libelle = $(this).data('libelle');
+
+            $('#titremode').html('Modification')
+            $('#modal_mode').modal('show')
+
+            $('#mode_id').val(mode_id);
+            $('#libelle_mode').val(libelle);
+            });
+    });
+    </script>
 
 </body>
 
 </html>
-
-
-<script type="text/javascript">
-
-
-  $(document).ready(function(){
-  
-      $('#creer_banque').click(function() {
-          // alert('ok')
-         // $('#mandat_id').val('');
-          $('#form_banque').trigger("reset");
-          $('#titrebanque').html('Ajouter nouvelle banque ')
-          $('#modal_banque').modal('show');
-      });
-      //  appel du modal de mode de paiement
-  
-      $('#creer_mode').click(function() {
-          // alert('ok')
-         // $('#mandat_id').val('');
-          $('#form_mode').trigger("reset");
-          $('#titremode').html('Ajouter nouveau mode ')
-          $('#modal_mode').modal('show');
-      });
-  
-  
-  
-     
-        $('body').on('click','#modifier_class', function(){
-  
-          var id = $(this).data('id');
-          var libelle = $(this).data('libelle');
-          var code = $(this).data('code');
-  
-         // $('#titrebanque').html('Modification')
-         console.log(id);
-          $('#modifier').modal('show');
-  
-          $('#id').val(id);
-          $('#libelle').val(libelle);
-          $('#code').val(code);
-      });
-  
-      //*************** modification de mode*********** */
-  
-      $('body').on('click','#modif_mode', function(){
-  
-          var mode_id = $(this).data('id');
-          var libelle = $(this).data('libelle');
-  
-          $('#titremode').html('Modification')
-          $('#modal_mode').modal('show')
-  
-          $('#mode_id').val(mode_id);
-          $('#libelle_mode').val(libelle);
-          });
-  });
-  </script>

@@ -60,7 +60,7 @@
         <div id="collapseBootstrap2" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Saisie</h6>
-            <a class="collapse-item" href="#">Inscirption</a>
+            <a class="collapse-item" href="{{ URL::to('etudiants/create') }}">Inscirption</a>
             <a class="collapse-item" href="#">Emprunt de livre</a>
             <a class="collapse-item" href="#">Dépot de livre</a>
           </div>
